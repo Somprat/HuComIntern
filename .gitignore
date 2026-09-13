@@ -1,0 +1,23 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Local environment files and editor settings
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+.DS_Store
+
+# MELD media is distributed separately and is too large for Git.
+/datasets/MELD/MELD.Raw/
+/datasets/MELD/MELD.Raw.tar.gz
+/datasets/MELD/train
+/datasets/MELD/dev
+/datasets/MELD/test
+/datasets/MELD/*.wav
+/datasets.annotations-backup/

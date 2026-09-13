@@ -1,0 +1,11 @@
+numpy>=1.24,<2
+pandas>=2,<3
+torch>=2.6,<3
+transformers>=4.40,<5
+sentencepiece>=0.2,<1
+protobuf>=4,<7
+opencv-python-headless>=4.8,<4.11
+Pillow>=10,<13
+jupyterlab>=4,<5
+ipykernel>=6,<7
+scikit-learn>=1.4,<2
