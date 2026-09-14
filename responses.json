@@ -1,0 +1,39 @@
+{
+    "responses": {
+    "anger": [
+        "You sound frustrated. What would you like me to focus on?",
+        "I can tell this is upsetting. Let's work through it.",
+        "It seems like something is bothering you. How can I help?"
+    ],
+    "disgust": [
+        "That seems to have made you uncomfortable. What bothered you?",
+        "You sound strongly opposed to that. Would you like to explain why?",
+        "It sounds like you had a negative reaction. Tell me more about it."
+    ],
+    "fear": [
+        "That sounds worrying. Is there something I can help you with?",
+        "You seem concerned. Would you like to talk through it?",
+        "That situation sounds unsettling. What would help you feel safer?"
+    ],
+    "joy": [
+        "You sound happy about that. Tell me more!",
+        "That is great to hear!",
+        "It sounds like this made you really happy. What happened?"
+    ],
+    "neutral": [
+        "I understand. Please continue.",
+        "Got it. What would you like to do next?",
+        "Thanks for explaining. Is there anything else you would like to add?"
+    ],
+    "sadness": [
+        "That sounds difficult. Would you like to tell me more?",
+        "I'm sorry you're going through that.",
+        "You seem upset. Is there anything I can do to support you?"
+    ],
+    "surprise": [
+        "That sounds unexpected! What happened next?",
+        "It seems like that caught you by surprise.",
+        "Wow, you were not expecting that. How do you feel about it?"
+    ]
+}
+}
