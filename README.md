@@ -1,6 +1,6 @@
 # Real-Time Multimodal Emotion-Aware Response Prototype
 
-This project implements the **Text + Vision** track of the ML challenge. It
+I implements the **Text + Vision** track of the ML challenge. It
 accepts an utterance transcript and a matching MP4 video clip, combines both
 modalities, predicts one of the seven MELD emotion categories, and returns a
 short response conditioned on the predicted emotional state.
@@ -8,13 +8,15 @@ short response conditioned on the predicted emotional state.
 The seven supported emotions are `anger`, `disgust`, `fear`, `joy`, `neutral`,
 `sadness`, and `surprise`.
 
+I also implements and optional version of Text + Vision + Audio. The audio model takes in and audio file, combined with other input mentioned above and output one of the seven emotionals states.
+
 ## Completed system
 
 The prototype provides an end-to-end local inference path:
 
-1. The user enters the spoken text and the path to its matching video clip.
-2. DeBERTa encodes the text while VideoMAE encodes sampled video frames.
-3. The two embeddings are concatenated and passed through an MLP classifier.
+1. The user enters the spoken text, the path to its matching video clip and the optional path to the audio file.
+2. DeBERTa encodes the text, VideoMAE encodes sampled video frames and WavLM encodes the audio.
+3. The three embeddings are concatenated and passed through an MLP classifier.
 4. The classifier returns a MELD emotion and softmax confidence score.
 5. A lightweight response policy selects a short response associated with the
    predicted emotion.
@@ -27,12 +29,13 @@ over time without reloading the models.
 
 - **Text encoder:** `microsoft/deberta-v3-small`
 - **Vision encoder:** `MCG-NJU/videomae-base`
-- **Fusion:** mean-pooled text and video embeddings are concatenated
+- **Audio encoder:** `microsoft/wavlm-base`
+- **Fusion:** mean-pooled text, video, and audio embeddings are concatenated
 - **Classifier:** two-layer MLP with ReLU and dropout
 - **Response generation:** emotion-conditioned response templates from
   `responses.json`
 
-Both pretrained encoders are frozen during training. Only the fusion classifier
+All pretrained encoders is frozen during training. Only the fusion classifier
 is trained. This keeps training relatively inexpensive and makes the system
 easier to understand, but limits task-specific adaptation of the encoders.
 
@@ -48,8 +51,9 @@ inference path, including frozen parameters.
 | --- | ---: |
 | DeBERTa-v3-small | 141,304,320 |
 | VideoMAE-base | 86,227,200 |
+| WavLM | 94,381,936 |
 | Fusion classifier | 790,535 |
-| **Total** | **228,322,055** |
+| **Total** | **322,703,991** |
 
 The complete system contains approximately **228.3 million parameters**, well
 below the challenge limit of 6 billion.
@@ -122,19 +126,17 @@ Measurements use batch size 1 on the local demo hardware after warm-up.
 
 | Measurement | Result |
 | --- | ---: |
-| Number of measured runs | TBD |
-| Mean inference latency | TBD ms |
-| Median inference latency | TBD ms |
-| 95th-percentile latency | TBD ms |
-| Cold model startup time | TBD s |
+| Number of measured runs | 10 |
+| Mean inference latency | 1.208 ms |
+| Median inference latency | 1.197 ms |
 
 ## Hardware and observed resources
 
 ### Training and evaluation
 
 - GPU: NVIDIA A40
-- Peak GPU memory: TBD GB
-- Training time: TBD
+- Peak GPU memory: 51 GB (for the optional audio model version)
+- Training time: ~ 6 hours
 
 ### Local interactive demo
 
@@ -142,7 +144,6 @@ Measurements use batch size 1 on the local demo hardware after warm-up.
 - Processor: Apple M4, 10-core CPU
 - Memory: 16 GB unified memory
 - PyTorch device: MPS
-- Peak process memory during inference: TBD GB
 - Downloaded pretrained-model storage: TBD GB
 - Classifier checkpoint size: approximately 3 MB
 
@@ -186,20 +187,9 @@ Two classifier configurations were evaluated:
 | --- | ---: | ---: | ---: |
 | Baseline cross-entropy | **62.84%** | **60.14%** | 39.61% |
 | Square-root class-weighted cross-entropy | 59.08% | 59.25% | **41.40%** |
+| Optional Audio + Visual + Text (equally weighted cross entropy) 63.26% | 59.99% | 39.39% | 
 
-### Baseline per-class results
 
-| Emotion | Precision | Recall | F1 | Support |
-| --- | ---: | ---: | ---: | ---: |
-| Anger | 0.5608 | 0.3072 | 0.3970 | 345 |
-| Disgust | 0.2000 | 0.0441 | 0.0723 | 68 |
-| Fear | 0.4286 | 0.0600 | 0.1053 | 50 |
-| Joy | 0.5060 | 0.6244 | 0.5590 | 402 |
-| Neutral | 0.7285 | 0.8352 | 0.7782 | 1,256 |
-| Sadness | 0.4737 | 0.2163 | 0.2970 | 208 |
-| Surprise | 0.4973 | 0.6512 | 0.5639 | 281 |
-
-## Decisions and trade-offs
 
 ### Baseline versus class weighting
 
@@ -221,12 +211,6 @@ accuracy from 62.84% to 59.08% and weighted F1 from 60.14% to 59.25%. The
 baseline checkpoint is therefore used for the primary interactive demo, while
 the weighted checkpoint is retained to demonstrate the class-balance trade-off.
 
-### Template responses versus an LLM
-
-The prototype uses short, predefined responses rather than an additional
-language model. This keeps the complete system local, fast, predictable, and
-well below the parameter limit. The response is conditioned on the multimodal
-emotion prediction, but it does not perform open-ended language generation.
 
 ## Limitations
 
