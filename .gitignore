@@ -21,3 +21,7 @@ __pycache__/
 /datasets/MELD/test
 /datasets/MELD/*.wav
 /datasets.annotations-backup/
+
+# Alternative local extraction output and macOS resource forks
+/datasets/MELD/audio/
+._*
