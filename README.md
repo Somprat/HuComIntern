@@ -55,7 +55,7 @@ inference path, including frozen parameters.
 | Fusion classifier | 790,535 |
 | **Total** | **322,703,991** |
 
-The complete system contains approximately **228.3 million parameters**, well
+The complete system contains approximately **322.7 million parameters**, well
 below the challenge limit of 6 billion.
 
 ## Installation
@@ -127,8 +127,8 @@ Measurements use batch size 1 on the local demo hardware after warm-up.
 | Measurement | Result |
 | --- | ---: |
 | Number of measured runs | 10 |
-| Mean inference latency | 1.208 ms |
-| Median inference latency | 1.197 ms |
+| Mean inference latency | 1.208 s |
+| Median inference latency | 1.197 s |
 
 ## Hardware and observed resources
 
